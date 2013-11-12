@@ -14,7 +14,10 @@ import java.sql.SQLException;
 public class JDBCConnectionPoolTEST {
     public static void  main(String args[]) throws SQLException{
         JDBCConnectionPool pool = new JDBCConnectionPool();
+        for(int i =0;1<100;i++){
         Connection con =  pool.checkOut();
-        System.out.println("connected :: "+con.getMetaData());
+            System.out.println("int : "+ i);
+        }
+        
     }
 }

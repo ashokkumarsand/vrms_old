@@ -98,7 +98,7 @@ public class Database implements IDatabase {
             pool.checkIn(con);
         }
     }
-    private final static String REALM = "vrmsuser";
+    private final static String REALM = "";
     
     @Override
     public int loginAuth(String username, String password) {
@@ -110,9 +110,10 @@ public class Database implements IDatabase {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                String ck = rs.getString(2);
+                String ck = rs.getString("password");
+                System.out.println("user password : "+ck +" syso pass : "+Digest.md5(REALM + password) );
                 if (ck.equals(Digest.md5(REALM + password))) {
-                    userId = rs.getInt(1);
+                    userId = rs.getInt("user_id");
                 }
             }
         } catch (Exception e) {

@@ -30,15 +30,15 @@ public class ConnectionProperties {
             instance = new ConnectionProperties();
             Properties properties = new Properties();
             try {
-                properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("com/vrms/properties/connection.properties"));
-            } catch (IOException ex) {
+                properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("com/vrms/properties/connection.properties"));
+               } catch (IOException ex) {
                 Logger.getLogger(ConnectionProperties.class.getName()).log(Level.SEVERE, null, ex);
             }
             username = properties.getProperty("username");
             password = properties.getProperty("password");
             driver = properties.getProperty("driver");
             url = properties.getProperty("protocol") + ":" + properties.getProperty("database") + "://" + properties.getProperty("host") + ":" + properties.getProperty("port") + "/" + properties.getProperty("database_name");
-
+            System.out.println("URL : "+url);
         }
         return instance;
 
