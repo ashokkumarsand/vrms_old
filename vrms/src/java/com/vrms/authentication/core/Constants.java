@@ -16,6 +16,7 @@ public class Constants {
     public final static String INDEX_PAGE = URL_ROOT + "/index.jsp";
     public final static String USERNAME = "username";
     public final static String PASSWORD = "password";
+    public final static String PERMISSIONS = "permission";
 
     public String getUSERID() {
         return USERID;

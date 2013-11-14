@@ -14,7 +14,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel=stylesheet href=css/bootstrap.css  type=text/css/>
         <link rel="stylesheet" href="css/bootstrap-responsive.css">
-        <script src=js/jquery/jquery-1.10.2.js  type=text/javascript/>
+        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="script/lib/html5.js" type="text/javascript"></script>
+        <![endif]-->
+        <script src=js/jquery/jquery-1.10.2.js  type=text/javascript></script>
         <script src=js/bootstrap.js type=text/javascript></script>
     </head>
     <body>

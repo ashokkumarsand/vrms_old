@@ -15,6 +15,7 @@ public enum Permissions {
     ALL,
     ASSIGN_CAB,
     BLOCK_USER,
+    CREATE_ROLE,
     EDIT_LOG_APPROVE,
     EDIT_LOG_REQUEST,
     GRANT,

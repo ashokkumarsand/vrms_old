@@ -7,11 +7,13 @@ package com.vrms.authentication;
 import com.vrms.authentication.core.Constants;
 import com.vrms.authentication.core.Database;
 import com.vrms.authentication.core.IDatabase;
+import com.vrms.exception.NoUserFoundException;
 import com.vrms.model.UserInfo;
 import com.vrms.util.Digest;
 import com.vrms.util.Permissions;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,16 +42,21 @@ public class ServiceLoginAuth extends HttpServlet {
                 if(!Digest.isEmpty(password)) {
                         String username = request.getParameter(Constants.USERNAME);
                         if(!Digest.isEmpty(username))  {
+                            try {
                                 IDatabase db = Database.getInstance();
                                 int userId = db.loginAuth(username, password);
                                 UserInfo user = new UserInfo();
                                 user.setUserid(userId);
                                 if(userId >= 0 && !user.getPermissions().contains(Permissions.NONE)) {
                                         HttpSession session = request.getSession();
+                                        session.setAttribute(Constants.PERMISSIONS, user.getPermissions());
                                         session.setAttribute(Constants.USERID, userId);
                                         response.sendRedirect(Constants.INDEX_PAGE);
                                         return;
                                 }
+                            } catch (NoUserFoundException ex) {
+                                Logger.getLogger(ServiceLoginAuth.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                 }
                 response.sendRedirect(Constants.LOGIN_PAGE+"?st="+ Base64.encodeBase64String("not exist".getBytes()));

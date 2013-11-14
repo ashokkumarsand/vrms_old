@@ -13,8 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +36,7 @@ public class UserInfo {
     private boolean status;
     private boolean exists;
     private JDBCConnectionPool pool;
-
+    private List<Permissions> permissionsList;
     public UserInfo() {
         pool = new JDBCConnectionPool();
     }
@@ -85,33 +83,31 @@ public class UserInfo {
         if(userid==null||userid<0){
             throw new NoUserFoundException();
         }
-        List<Permissions> list = new ArrayList<>();
+        permissionsList = new ArrayList<>();
         Connection con = pool.checkOut();
         try(PreparedStatement ps = con.prepareStatement("SELECT permissions.permission_value FROM public.permissions, public.role_permissions, public.users WHERE permissions.permission_id = role_permissions.permission_id AND role_permissions.role_id = users.role_id AND users.user_id = ?")){
             ps.setInt(1, userid);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 if(Permissions.valueOf(rs.getString("permission_value")).equals(Permissions.ALL)){
-                    list.clear();
-                    list.addAll(Arrays.asList(Permissions.values()));
-                    list.remove(Permissions.NONE);
+                    permissionsList.clear();
+                    permissionsList.addAll(Arrays.asList(Permissions.values()));
+                    permissionsList.remove(Permissions.NONE);
                     break;
                 }
-                list.add(Permissions.valueOf(rs.getString("permission_value")));
+                permissionsList.add(Permissions.valueOf(rs.getString("permission_value")));
+            }
+            if(permissionsList.size()>1&&permissionsList.contains(Permissions.NONE)){
+                permissionsList.remove(Permissions.NONE);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return list;    
+        return permissionsList;    
     }
     
 
-    public List<String> getMenu(){
-        List<String> list = new ArrayList<>();
-        
-        return null;
     
-    }
     /**
      * User identification number for information retrive
      * @return 
