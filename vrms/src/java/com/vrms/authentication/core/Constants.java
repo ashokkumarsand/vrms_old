@@ -17,7 +17,8 @@ public class Constants {
     public final static String USERNAME = "username";
     public final static String PASSWORD = "password";
     public final static String PERMISSIONS = "permission";
-
+    public final static String RELAM ="";
+    public final static String DEFAULT_PASSWORD ="abcd1234!";
     public String getUSERID() {
         return USERID;
     }

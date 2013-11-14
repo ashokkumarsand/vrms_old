@@ -8,7 +8,7 @@ package net.vrms.request.constants;
  *
  * @author Ashok
  */
-public class UserCreationRequestConstants {
+public class UserRequestConstants {
     public static final String OFFICE_ID="officeId";
     public static final String NAME="name";
     public static final String EMAIL="email";

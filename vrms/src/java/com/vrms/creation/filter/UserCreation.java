@@ -5,21 +5,17 @@
  */
 package com.vrms.creation.filter;
 
-import com.google.gson.JsonObject;
-import com.vrms.authentication.core.Constants;
+import com.google.gson.Gson;
 import com.vrms.connection.JDBCConnectionPool;
-import com.vrms.model.UserInfo;
+import com.vrms.util.Permissions;
+import com.vrms.util.VRMSUtil;
 import com.vrms.validate.UserObjectValidator;
+import com.vrms.validate.ValidateEmail;
+import com.vrms.validate.ValidateExtensionNo;
+import com.vrms.validate.ValidatePhoneNumber;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -29,8 +25,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import net.vrms.request.constants.UserCreationRequestConstants;
-import org.apache.tomcat.util.codec.binary.Base64;
+import net.vrms.request.constants.CustomErrorsValues;
+import net.vrms.request.constants.UserRequestConstants;
+import net.vrms.responce.beans.UserCreationErrorBean;
 
 /**
  *
@@ -43,62 +40,11 @@ public class UserCreation implements Filter {
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
+    private JDBCConnectionPool pool;
 
     public UserCreation() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("UserCreation:DoBeforeProcessing");
-        }
-
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-	/*
-         for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
-         String name = (String)en.nextElement();
-         String values[] = request.getParameterValues(name);
-         int n = values.length;
-         StringBuffer buf = new StringBuffer();
-         buf.append(name);
-         buf.append("=");
-         for(int i=0; i < n; i++) {
-         buf.append(values[i]);
-         if (i < n-1)
-         buf.append(",");
-         }
-         log(buf.toString());
-         }
-         */
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("UserCreation:DoAfterProcessing");
-        }
-
-        // Write code here to process the request and/or response after
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-	/*
-         for (Enumeration en = request.getAttributeNames(); en.hasMoreElements(); ) {
-         String name = (String)en.nextElement();
-         Object value = request.getAttribute(name);
-         log("attribute: " + name + "=" + value.toString());
-
-         }
-         */
-        // For example, a filter might append something to the response.
-	/*
-         PrintWriter respOut = new PrintWriter(response.getWriter());
-         respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
-         */
-    }
     /**
      *
      * @param request The servlet request we are processing
@@ -108,61 +54,86 @@ public class UserCreation implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    private JDBCConnectionPool pool;
-
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
+
         //name field cannot be left blank and must contain character only 
-        
-        String name = request.getParameter("name");
+        String name = request.getParameter(UserRequestConstants.NAME);
+        String email = request.getParameter(UserRequestConstants.EMAIL);
+        String mobileNO = request.getParameter(UserRequestConstants.MOBILE_NO);
+        String extNo = request.getParameter(UserRequestConstants.EXT);
+        String roleID = request.getParameter(UserRequestConstants.ROLE_ID);
+        String departmentID = request.getParameter(UserRequestConstants.DEPT_ID);
+        String managerID = request.getParameter(UserRequestConstants.MANAGER_ID);
+
+        //Print writer object
         PrintWriter out = response.getWriter();
-        JsonObject json = new JsonObject();
-        JsonObject errorSet = new JsonObject();
-        System.out.println("name : "+name);
-        if (name == "" || (name.matches("-?\\d+(\\.\\d+)?"))) {
-            errorSet.addProperty("field", UserCreationRequestConstants.NAME);
-            errorSet.addProperty("type", "Invalid Formate");
-            json.add("error", errorSet);
-        }
-        out.println(json.toString());
-        /*String mobileNO = request.getParameter("mobileNO");
-        String roleID = request.getParameter("roleID");
-        String departmentID = request.getParameter("departmentID");
-        String managerID = request.getParameter("managerID");
-        String password = request.getParameter("password");
-
+        //JSON Object to send a responce in perticular formate
         UserObjectValidator validator = UserObjectValidator.getInstance();
-        if (!validator.isRoleExist(Integer.parseInt(roleID))) {
-            response.getWriter().print("{msg : 'asdasd'}");
-            return;
+
+        UserCreationErrorBean bean = new UserCreationErrorBean();
+
+
+        //request valid flag
+        boolean flag = true;
+
+        if (name.equals("")) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.NAME, CustomErrorsValues.REQUIRED, "Name is mendantory "));
 
         }
-
-
-
-               
-
-        //mobile number field cannot be blank and should be of 10 digits
-        if (mobileNO == null || mobileNO.length() != 10 || !(mobileNO.matches("-?\\d+(\\.\\d+)?"))) {
-
-            httpResponse.sendRedirect(Constants.INDEX_PAGE + "?st=" + Base64.encodeBase64String("not exist".getBytes()));
-            return;
+        if (email != null && !ValidateEmail.validate(email)) {
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.EMAIL, CustomErrorsValues.INVALID_PARAMETER, "Email formate is invalid"));
+            flag = false;
         }
-        //role id field cannot be left blank and should contain only digits
-        if (roleID == null || !(roleID.matches("-?\\d+(\\.\\d+)?"))) {
-            httpResponse.sendRedirect(Constants.INDEX_PAGE + "?st=" + Base64.encodeBase64String("not exist".getBytes()));
-            return;
-        }
-        //password field cannot be left blank and should be of minimum 8 characters
-        if (password.trim().equalsIgnoreCase("") || !(password.matches("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W]).{6,20})"))) {
-            httpResponse.sendRedirect(Constants.INDEX_PAGE + "?st=" + Base64.encodeBase64String("not exist".getBytes()));
-            return;
-        }*/
 
+        if (mobileNO == null || mobileNO.trim().equals("")) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.MOBILE_NO, CustomErrorsValues.REQUIRED, "mobile is mendantory"));
+        }
+
+        if (mobileNO != null && !ValidatePhoneNumber.validate(mobileNO)) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.MOBILE_NO, CustomErrorsValues.REQUIRED, "mobile no is not valid "));
+        }
+
+        if (extNo != null && !extNo.trim().equals("") && !ValidateExtensionNo.validate(extNo)) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.EXT, CustomErrorsValues.REQUIRED, "ext no is not valid "));
+        }
+        if (roleID == null) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.ROLE_ID, CustomErrorsValues.REQUIRED, "role is mendatory"));
+
+        }
+        if (roleID != null && !VRMSUtil.isInteger(roleID) || !validator.isRoleExist(Integer.parseInt(roleID))) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.ROLE_ID, CustomErrorsValues.INVALID_PARAMETER, "role doest not exist"));
+        }
+
+        if (departmentID != null && !departmentID.trim().equals("") && !VRMSUtil.isInteger(departmentID) && !validator.isDepartmentExist(Integer.parseInt(departmentID))) {
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.DEPT_ID, CustomErrorsValues.REQUIRED, "department does not exist"));
+        }
+
+        if (managerID != null&& !managerID.trim().equals("") && !VRMSUtil.isInteger(managerID) && !validator.isUserExist(Integer.parseInt(managerID))) {
+
+            flag = false;
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.MANAGER_ID, CustomErrorsValues.REQUIRED, "Manager does not exist"));
+        } else if (managerID != null && !managerID.trim().equals("") && !validator.isUserHasSetOfPermission(Integer.parseInt(managerID), Permissions.REQUEST_APPROVE)) {
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.MANAGER_ID, CustomErrorsValues.PERMISSION_NOT_EXIST, "Manager dont have permission to approve request"));
+            //Manager dont have rights to approve the request
+            //insert code for send responce
+        }
+        if (flag) {
+            chain.doFilter(request, response);
+        } else {
+            out.write(new Gson().toJson(bean));
+        }
     }
 
     /**
@@ -211,36 +182,6 @@ public class UserCreation implements Filter {
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
-    }
-
-    private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);
-
-        if (stackTrace != null && !stackTrace.equals("")) {
-            try {
-                response.setContentType("text/html");
-                PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);
-                pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
-
-                // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
-                pw.print(stackTrace);
-                pw.print("</pre></body>\n</html>"); //NOI18N
-                pw.close();
-                ps.close();
-                response.getOutputStream().close();
-            } catch (Exception ex) {
-            }
-        } else {
-            try {
-                PrintStream ps = new PrintStream(response.getOutputStream());
-                t.printStackTrace(ps);
-                ps.close();
-                response.getOutputStream().close();
-            } catch (Exception ex) {
-            }
-        }
     }
 
     public static String getStackTrace(Throwable t) {

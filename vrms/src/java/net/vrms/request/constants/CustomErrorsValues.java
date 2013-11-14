@@ -8,6 +8,6 @@ package net.vrms.request.constants;
  *
  * @author Ashok
  */
-public enum CustomErros {
-    INVALID_PARAMETER;
+public enum CustomErrorsValues {
+    INVALID_PARAMETER,REQUIRED,PERMISSION_NOT_EXIST;
 }

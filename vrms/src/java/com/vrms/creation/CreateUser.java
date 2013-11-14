@@ -6,7 +6,10 @@
  */
 package com.vrms.creation;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.vrms.connection.JDBCConnectionPool;
+import com.vrms.dao.UserObjects;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -18,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.vrms.request.constants.UserRequestConstants;
 
 /**
  *
@@ -34,65 +38,35 @@ public class CreateUser extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private JDBCConnectionPool pool;
-
-    public int createUser(int userID, int userOfficeID, String name, String mobileNO, int extensionNO, String email, int managerID, int departmentID, int roleID, String password) {
-        Connection con = pool.checkOut();
-
-        try (PreparedStatement ps = con.prepareStatement("insert into users values(?,?,?,?,?,?,?,?,?,?)")) {
-            ps.setInt(1, userID);
-            ps.setInt(2, userOfficeID);
-            ps.setString(3, name);
-            ps.setString(4, mobileNO);
-            ps.setInt(5, extensionNO);
-            ps.setString(6, email);
-            ps.setInt(7, managerID);
-            ps.setInt(8, departmentID);
-            ps.setInt(9, roleID);
-            ps.setString(10, password);
-            int n = ps.executeUpdate();
-            return n;
-
-
-        } catch (SQLException ex) {
-            System.out.println("i am here with exception ");
-            ex.printStackTrace();
-            Logger.getLogger(CreateUser.class.getName()).log(Level.SEVERE, null, ex);
-            return -1;
-        }
-
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        try {
-
-            CreateUser u = new CreateUser();
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            int userOfficeID = Integer.parseInt(request.getParameter("userOfficeID"));
-
-            String name = request.getParameter("name");
-            String mobileNO = request.getParameter("mobileNo");
-            int extensionNO = Integer.parseInt(request.getParameter("extensionNo"));
-            String email = request.getParameter("email");
-            int managerID = Integer.parseInt(request.getParameter("managerID"));
-            int departmentID = Integer.parseInt(request.getParameter("departmentID"));
-            int roleID = Integer.parseInt(request.getParameter("roleID"));
-            String password = request.getParameter("password");
-            int result = u.createUser(userID, userOfficeID, name, mobileNO, extensionNO, email, managerID, departmentID, roleID, password);
-
-            if (result != -1) {
-                out.println("{CreateUser:true}");
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        String name = request.getParameter(UserRequestConstants.NAME);
+        String mobileNO = request.getParameter(UserRequestConstants.MOBILE_NO);
+        String email = request.getParameter(UserRequestConstants.EMAIL);
+        String _userOfficeID = request.getParameter(UserRequestConstants.OFFICE_ID);
+        String _extensionNO = request.getParameter(UserRequestConstants.EXT);
+        String _managerID = request.getParameter(UserRequestConstants.MANAGER_ID);
+        String _departmentID = request.getParameter(UserRequestConstants.DEPT_ID);
+        String _roleID = request.getParameter(UserRequestConstants.ROLE_ID);
+        System.out.println("role id "+_roleID);
+        Integer userOfficeID = _userOfficeID.trim().equals("") ? null : Integer.parseInt(_userOfficeID);
+        Integer extensionNO = _extensionNO.trim().equals("") ? null : Integer.parseInt(_extensionNO);
+        Integer managerId = _managerID.trim().equals("") ? null : Integer.parseInt(_managerID);
+        Integer departmentId = _departmentID.trim().equals("") ? null : Integer.parseInt(_departmentID);
+        Integer roleId = _roleID.trim().equals("") ? null : Integer.parseInt(_roleID);
+        System.out.println("after pasre : "+roleId);
+        boolean result = new UserObjects().registerUser(userOfficeID, name, mobileNO, extensionNO, email, managerId, departmentId, roleId);
+        JsonPrimitive status = null;
+        if (result) {
+            status = new JsonPrimitive(Boolean.TRUE);
+        } else {
+            status = new JsonPrimitive(Boolean.FALSE);
         }
-
-
+        JsonObject obj = new JsonObject();
+        obj.add("status", status);
+        out.print(obj);
     }
 
     /**

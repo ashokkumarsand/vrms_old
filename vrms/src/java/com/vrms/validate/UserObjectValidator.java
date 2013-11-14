@@ -5,10 +5,14 @@
 package com.vrms.validate;
 
 import com.vrms.connection.JDBCConnectionPool;
+import com.vrms.exception.NoUserFoundException;
+import com.vrms.model.UserInfo;
+import com.vrms.util.Permissions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +43,7 @@ public class UserObjectValidator {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-               exists = true;
+                exists = true;
             }
 
         } catch (SQLException ex) {
@@ -51,13 +55,13 @@ public class UserObjectValidator {
     }
 
     public boolean isDepartmentExist(int id) {
-       boolean exists = false;
+        boolean exists = false;
         Connection con = pool.checkOut();
         try (PreparedStatement ps = con.prepareStatement("SELECT DEPARTMENT_ID FROM departments where department_id=?")) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-               exists = true;
+                exists = true;
             }
 
         } catch (SQLException ex) {
@@ -75,7 +79,7 @@ public class UserObjectValidator {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-               exists = true;
+                exists = true;
             }
 
         } catch (SQLException ex) {
@@ -84,5 +88,18 @@ public class UserObjectValidator {
             pool.checkIn(con);
         }
         return exists;
+    }
+
+    public boolean isUserHasSetOfPermission(int userid, Permissions... permissionses) {
+        UserInfo uinfo = new UserInfo();
+        uinfo.setUserid(userid);
+        boolean flag = false;
+        try {
+           flag = uinfo.getPermissions().containsAll(Arrays.asList(permissionses));
+        } catch (NoUserFoundException ex) {
+            
+            Logger.getLogger(UserObjectValidator.class.getName()).log(Level.SEVERE, "User not exist in system for permissions", ex);
+        }
+        return flag;
     }
 }

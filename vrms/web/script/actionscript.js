@@ -20,11 +20,11 @@ $(document).ready(function() {
                         var officeid = $(document.createElement("input")).attr({id: "officeId", type: "textbox"}).addClass("span3")
                         var name = $(document.createElement("input")).attr({"name": "", id: "name", type: "textbox"}).addClass("span3")
                         var email = $(document.createElement("input")).attr({"name": "", id: "email", type: "textbox"}).addClass("span3")
-                        var mobile = $(document.createElement("input")).attr({"name": "", id: "mobile", type: "textbox"}).addClass("span3")
-                        var ext = $(document.createElement("input")).attr({"name": "", id: "mobile", type: "textbox"}).addClass("span3")
-                        var dept = $(document.createElement("input")).attr({"name": "", id: "dept", type: "textbox"}).addClass("span3")
-                        var manager = $(document.createElement("input")).attr({"name": "", id: "manager", type: "textbox"}).addClass("span3")
-                        var roles = $(document.createElement("select")).attr("id", "roles")
+                        var mobile = $(document.createElement("input")).attr({"name": "", id: "mobNo", type: "textbox"}).addClass("span3")
+                        var ext = $(document.createElement("input")).attr({"name": "", id: "ext", type: "textbox"}).addClass("span3")
+                        var dept = $(document.createElement("input")).attr({"name": "", id: "deptId", type: "textbox"}).addClass("span3")
+                        var manager = $(document.createElement("input")).attr({"name": "", id: "managerId", type: "textbox"}).addClass("span3")
+                        var roles = $(document.createElement("select")).attr("id", "roleId")
                         roles.append($(document.createElement("option")).val(undefined).text("SELECT"))
                         var _sys_role = eval("(" + obj.ADD_USER.roles + ")");
                         for (var role in _sys_role) {
@@ -60,6 +60,10 @@ $(document).ready(function() {
                                 .append($(document.createElement("div"))
                                 .addClass("control")
                                 .append(roles))).append($(document.createElement("div")).addClass("control-group")
+                                .append(_manager)
+                                .append($(document.createElement("div"))
+                                .addClass("control")
+                                .append(manager))).append($(document.createElement("div")).addClass("control-group")
                                 .append()
                                 .append($(document.createElement("div"))
                                 .addClass("control")
@@ -84,7 +88,17 @@ function CreateUser() {
     $.ajax({
         url: 'CreateUser',
         type: 'post',
-        data:{name:""},
+        data: {
+            officeId: $("#officeId").val(),
+            name: $("#name").val(),
+            email: $("#email").val(),
+            ext: $("#ext").val(),
+            mobNo: $("#mobNo").val(),
+            managerId: $("#managerId").val(),
+            roleId: $("#roleId :selected").val(),
+            deptId: $("#deptId").val()
+        },
+        dataType: 'json',
         success: function(obj) {
             console.log(obj);
         }

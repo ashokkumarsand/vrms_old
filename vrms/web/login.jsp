@@ -18,8 +18,8 @@
         <!--[if lt IE 9]>
           <script src="script/lib/html5.js" type="text/javascript"></script>
         <![endif]-->
-        <script src=js/jquery/jquery-1.10.2.js  type=text/javascript></script>
-        <script src=js/bootstrap.js type=text/javascript></script>
+        <script src="script/lib/jquery-1.10.2.js"  type=text/javascript></script>
+        <script src="script/bootstrap.min.js" type=text/javascript></script>
     </head>
     <body>
         <div class="navbar">
