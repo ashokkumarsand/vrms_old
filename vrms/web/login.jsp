@@ -10,35 +10,38 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>vrms:login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel=stylesheet href=css/bootstrap.css  type=text/css/>
-        <link rel="stylesheet" href="css/bootstrap-responsive.css">
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <title>vrms</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css"  type="text/css" media="screen"/>
+
+        <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+        <!--[if IE 7]>
+      <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
+      <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
-          <script src="script/lib/html5.js" type="text/javascript"></script>
+            <script src="script/lib/html5.js"></script>
+            <script src="script/lib/respond.min.js"></script>
         <![endif]-->
-        <script src="script/lib/jquery-1.10.2.js"  type=text/javascript></script>
-        <script src="script/bootstrap.min.js" type=text/javascript></script>
+
+
+        <link href="css/docs.css" rel="stylesheet" type="text/css">
+        <link href="css/bootstrap.min.theme.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="script/lib/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="script/bootstrap.js"></script>
+        <script type="text/javascript" src="script/actionscript.js"></script>
+        <script type="text/javascript" src="script/lib/angular.min.js"></script>
+        <link rel="stylesheet" href="css/actionscript.css">
     </head>
     <body>
-        <div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-th-list"></span></a>
-                    <a href="#" class="brand">VRMS</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav pull-right">
 
-                        </ul>
-                    </div>
-                </div>
+        <div class="col-md-3 col-md-offset-4 well" style="background: whitesmoke">
+            <div class="center-block">
+                <h2>Login</h2>
             </div>
-        </div>
 
-        <div class="container ">
-            <div class="row-fluid span3" >
+            <div class="center-block" >
                 <form action="ServiceLoginAuth" method="post" class="form-actions">
                     <div>
                         <div class="control-group">
@@ -58,7 +61,7 @@
                                 <label class="checkbox">
                                     <input type="checkbox"> Remember me
                                 </label>
-                                <button type="submit" class="btn">Sign in</button>
+                                <button type="submit" class="btn btn-primary">Sign in</button>
                             </div>
                         </div>
                     </div>

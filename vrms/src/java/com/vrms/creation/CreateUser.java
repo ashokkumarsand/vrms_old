@@ -8,6 +8,7 @@ package com.vrms.creation;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.vrms.authentication.core.Constants;
 import com.vrms.connection.JDBCConnectionPool;
 import com.vrms.dao.UserObjects;
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class CreateUser extends HttpServlet {
         }
         JsonObject obj = new JsonObject();
         obj.add("status", status);
+        obj.addProperty("password", Constants.DEFAULT_PASSWORD);
         out.print(obj);
     }
 

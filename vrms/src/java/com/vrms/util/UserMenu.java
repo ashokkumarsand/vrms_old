@@ -28,11 +28,11 @@ public enum UserMenu {
             return Arrays.asList(Permissions.ADD_CAB,Permissions.ADD_VEHICLE,Permissions.ASSIGN_CAB,Permissions.VIEW_CAB);
         }
         
-    },REQUEST{ 
+    },REQUEST_CAB{ 
 
         @Override
         public List<Permissions> getPermissions() {
-            return Arrays.asList(Permissions.REQUEST_APPROVE,Permissions.REQUEST_MAKE,Permissions.REQUEST_ONLY,Permissions.REQUEST_VIEW,Permissions.REQUEST_FORWARD_APPROVE,Permissions.REQUEST_CANCLE,Permissions.REVOKE);
+            return Arrays.asList(Permissions.REQUEST_MAKE,Permissions.REQUEST_ONLY);
         }
         
     },LOG_MANAGE{

@@ -58,7 +58,6 @@ public class UserCreation implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
 
         //name field cannot be left blank and must contain character only 
@@ -86,7 +85,7 @@ public class UserCreation implements Filter {
             bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.NAME, CustomErrorsValues.REQUIRED, "Name is mendantory "));
 
         }
-        if (email != null && !ValidateEmail.validate(email)) {
+        if (email != null &&!email.trim().equals("")&&!ValidateEmail.validate(email)) {
             bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.EMAIL, CustomErrorsValues.INVALID_PARAMETER, "Email formate is invalid"));
             flag = false;
         }
@@ -110,9 +109,9 @@ public class UserCreation implements Filter {
             bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.ROLE_ID, CustomErrorsValues.REQUIRED, "role is mendatory"));
 
         }
-        if (roleID != null && !VRMSUtil.isInteger(roleID) || !validator.isRoleExist(Integer.parseInt(roleID))) {
+        if (roleID != null&&  roleID.trim().equals("") || !VRMSUtil.isInteger(roleID)&& !validator.isRoleExist(Integer.parseInt(roleID))) {
             flag = false;
-            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.ROLE_ID, CustomErrorsValues.INVALID_PARAMETER, "role doest not exist"));
+            bean.getErrors().add(bean.new ErrorBean(UserRequestConstants.ROLE_ID, CustomErrorsValues.INVALID_PARAMETER, "Select Role"));
         }
 
         if (departmentID != null && !departmentID.trim().equals("") && !VRMSUtil.isInteger(departmentID) && !validator.isDepartmentExist(Integer.parseInt(departmentID))) {

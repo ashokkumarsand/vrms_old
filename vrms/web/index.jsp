@@ -18,15 +18,25 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>vrms</title>
-        <link rel=stylesheet href=css/bootstrap.css  type=text/css/>
-        <link rel="stylesheet" href="css/bootstrap-responsive.css">
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <link rel="stylesheet" href="css/bootstrap.min.css"  type="text/css" media="screen"/>
+
+        <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+        <!--[if IE 7]>
+      <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
+      <![endif]-->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
-          <script src="script/lib/html5.js" type="text/javascript"></script>
+            <script src="script/lib/html5.js"></script>
+            <script src="script/lib/respond.min.js"></script>
         <![endif]-->
-    
+
+
+        <link href="css/docs.css" rel="stylesheet" type="text/css">
+        <link href="css/bootstrap.min.theme.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="script/lib/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="script/bootstrap.js"></script>
+        <script type="text/javascript" src="script/lib/angular.min.js"></script>
         <script type="text/javascript" src="script/actionscript.js"></script>
         
         <link rel="stylesheet" href="css/actionscript.css">
@@ -38,72 +48,72 @@
             <jsp:setProperty name="userInfo" property="userid" value="${sessionScope[constant.USERID]}"/>
         </jsp:useBean>
 
-
-
-        <div class="row-fluid">
-            <div class="navbar navbar-default navbar-fixed-top">
-                <div class="navbar-inner">
-                    <a href="#" class="brand">VRMS</a>
-                    <ul role="navigation" class="nav">
-                        <li><a href="#" >Home</a></li>
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Messages <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Inbox</a></li>
-                                <li><a href="#">Drafts</a></li>
-                                <li><a href="#">Sent Items</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Trash</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav pull-right">
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">${userInfo.name} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="Logout">Logout</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Settings</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="">VRMS</a>
             </div>
-            <div class="container-fluid" style="margin-top: 50px;">
-                <div class="row-fluid">
-                    <div class="span2">
-                        <ul class="nav nav-pills nav-stacked ">
-                            <%
-                                List<Permissions> permission = userInfo.getPermissions();
-                                List<Permissions> menuPermission = UserMenu.USER_MANAGE.getPermissions();
-                                menuPermission.retainAll(permission);
-                                if (menuPermission.size() > 0) {
-                            %>
-                            <li id="<%= UserMenu.USER_MANAGE%>"><a href="javascript:void(0)" >Manage Users</a></li>
-                                <%
-                                    }
-                                    menuPermission = UserMenu.CAB_MANAGE.getPermissions();
-                                    menuPermission.retainAll(permission);
-                                    if (menuPermission.size() > 0) {
-                                %>
-                            <li id="<%= UserMenu.CAB_MANAGE%>"><a href="#" >Manage CABS</a></li>
-                                <%
-                                    }
+            <div class="navbar-collapse collapse navbar-responsive-collapse">
 
-                                %>
-
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href=""><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-bell"></span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>&nbsp; ${userInfo.name}  <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Settings <span class="glyphicon glyphicon-cog"></span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="Logout">Logout <span class="glyphicon glyphicon-off"></span></a></li>
                         </ul>
-                    </div>
-                    <div class="span10">
-                        <div class="alert alert-error" id="alert-error" style="display: none">
-                            <button type="button" class="close" data-dismiss="alert">×</button>
-                            <strong style="display: inline-block">Error !!</strong> 
-                            <div id="msg" style="display: inline-block"></div>
-                        </div>
-                        <div id="container">
-                        <!--Body content-->
-                        </div>
-                    </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+
+
+        <div class="container row" >
+
+            <div class="col-md-3 bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav affix" ng-app="makeRequest"  ng-controller="requestViewCtrl">
+                    <%
+                        List<Permissions> permission = userInfo.getPermissions();
+                        List<Permissions> menuPermission = UserMenu.USER_MANAGE.getPermissions();
+                        menuPermission.retainAll(permission);
+                        if (menuPermission.size() > 0) {
+                    %>
+                    <li id="<%= UserMenu.USER_MANAGE%>" class="myTask"><a href="javascript:void(0)">Manage Users</a></li>
+                        <%
+                            }
+                            menuPermission = UserMenu.CAB_MANAGE.getPermissions();
+                            menuPermission.retainAll(permission);
+                            if (menuPermission.size() > 0) {
+                        %>
+                    <li id="<%= UserMenu.CAB_MANAGE%>" class="myTask"><a href="#">Manage CABS</a></li>
+                        <%
+                            }
+                            menuPermission = UserMenu.REQUEST_CAB.getPermissions();
+                            menuPermission.retainAll(permission);
+                            if (menuPermission.size() > 0) {
+                        %>
+                    <li id="<%= UserMenu.REQUEST_CAB%>" class="myTask" ng-click="newRquest()"><a href="#" >Request vehicle</a></li>
+                        <%
+                            }
+
+                        %>
+
+                </ul>
+            </div>
+            <div class="col-md-9" id="base-cont">
+                <div id="putError"></div>
+               
+                <div id="container">
+                    <!--Body content-->
                 </div>
             </div>
         </div>

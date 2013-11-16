@@ -56,21 +56,12 @@ public class ManageUser extends HttpServlet {
                 elment.addProperty("roles",new Gson().toJson(new UserObjects().getAllRole()));
                 json.add(Permissions.ADD_USER.toString(), elment);
             }
-            if (permissions.contains(Permissions.BLOCK_USER)) {
+            if (permissions.contains(Permissions.MANAGE_USER_STATUS)) {
                 JsonObject elment = new JsonObject();
                 elment.addProperty("exist", Boolean.TRUE);
-                json.add(Permissions.BLOCK_USER.toString(), elment);
+                json.add(Permissions.MANAGE_USER_STATUS.toString(), elment);
             }
-            if (permissions.contains(Permissions.UNBLOCK_USER)) {
-                JsonObject elment = new JsonObject();
-                elment.addProperty("exist", Boolean.TRUE);
-                json.add(Permissions.UNBLOCK_USER.toString(), elment);
-            }
-            if (permissions.contains(Permissions.CREATE_ROLE)) {
-                JsonObject elment = new JsonObject();
-                elment.addProperty("exist", Boolean.TRUE);
-                json.add(Permissions.CREATE_ROLE.toString(), elment);
-            }
+            
         }
         json.add("login", login);
         out.println(json.toString());
