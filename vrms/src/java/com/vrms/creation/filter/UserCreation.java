@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.vrms.request.constants.CustomErrorsValues;
 import net.vrms.request.constants.UserRequestConstants;
-import net.vrms.responce.beans.UserCreationErrorBean;
+import net.vrms.responce.beans.CreationErrorBean;
 
 /**
  *
@@ -74,7 +74,7 @@ public class UserCreation implements Filter {
         //JSON Object to send a responce in perticular formate
         UserObjectValidator validator = UserObjectValidator.getInstance();
 
-        UserCreationErrorBean bean = new UserCreationErrorBean();
+        CreationErrorBean bean = new CreationErrorBean();
 
 
         //request valid flag

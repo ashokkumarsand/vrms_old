@@ -12,10 +12,10 @@ import net.vrms.request.constants.CustomErrorsValues;
  *
  * @author Ashok
  */
-public class UserCreationErrorBean {
+public class CreationErrorBean {
     private List<ErrorBean> errors;
 
-    public UserCreationErrorBean() {
+    public CreationErrorBean() {
         errors = new ArrayList<>();
     }
 

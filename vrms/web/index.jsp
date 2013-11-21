@@ -33,12 +33,13 @@
 
 
         <link href="css/docs.css" rel="stylesheet" type="text/css">
-        <link href="css/bootstrap.min.theme.css" rel="stylesheet" type="text/css" />
+        <!--<link href="css/bootstrap.min.theme.css" rel="stylesheet" type="text/css" />-->
         <script type="text/javascript" src="script/lib/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="script/bootstrap.js"></script>
         <script type="text/javascript" src="script/lib/angular.min.js"></script>
         <script type="text/javascript" src="script/actionscript.js"></script>
-        
+        <script type="text/javascript" src="script/lib/bootstrap-datetimepicker.min.js"></script>
+        <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="css/actionscript.css">
     </head>
     <body>
@@ -77,10 +78,10 @@
 
 
 
-        <div class="container row" >
+        <div class="container row" ng-app="request">
 
             <div class="col-md-3 bs-docs-sidebar">
-                <ul class="nav nav-list bs-docs-sidenav affix" ng-app="makeRequest"  ng-controller="requestViewCtrl">
+                <ul class="nav nav-list bs-docs-sidenav affix"  ng-controller="requestViewCtrl">
                     <%
                         List<Permissions> permission = userInfo.getPermissions();
                         List<Permissions> menuPermission = UserMenu.USER_MANAGE.getPermissions();
@@ -109,12 +110,15 @@
 
                 </ul>
             </div>
-            <div class="col-md-9" id="base-cont">
+            <div ></div>
+            <div class="col-md-9" id="base-cont" ng-controller="ReqCtrl">
                 <div id="putError"></div>
-               
-                <div id="container">
-                    <!--Body content-->
-                </div>
+                <form ng-submit="fetchRequest()">
+                    
+                    <div id="container">
+                        <!--Body content-->
+                    </div>
+                </form>
             </div>
         </div>
     </body>

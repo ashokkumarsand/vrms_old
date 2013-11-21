@@ -8,6 +8,14 @@
         <filter-name>UserCreation</filter-name>
         <filter-class>com.vrms.creation.filter.UserCreation</filter-class>
     </filter>
+    <filter>
+        <filter-name>AddVehicleFilter</filter-name>
+        <filter-class>com.vrms.creation.filter.AddVehicleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AddVehicleFilter</filter-name>
+        <servlet-name>AddVehicle</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>UserCreation</filter-name>
         <url-pattern>/CreateUser</url-pattern>
@@ -40,6 +48,18 @@
         <servlet-name>CreateUser</servlet-name>
         <servlet-class>com.vrms.creation.CreateUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddVehicle</servlet-name>
+        <servlet-class>com.vrms.creation.AddVehicle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SubmitRequest</servlet-name>
+        <servlet-class>com.vrms.creation.SubmitRequest</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddCab</servlet-name>
+        <servlet-class>com.vrms.creation.AddCab</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CookieHacker</servlet-name>
         <url-pattern>/cookie</url-pattern>
@@ -67,6 +87,18 @@
     <servlet-mapping>
         <servlet-name>CreateUser</servlet-name>
         <url-pattern>/CreateUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddVehicle</servlet-name>
+        <url-pattern>/AddVehicle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubmitRequest</servlet-name>
+        <url-pattern>/SubmitRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddCab</servlet-name>
+        <url-pattern>/AddCab</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

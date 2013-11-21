@@ -30,8 +30,9 @@
         <link href="css/bootstrap.min.theme.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="script/lib/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="script/bootstrap.js"></script>
-        <script type="text/javascript" src="script/actionscript.js"></script>
+
         <script type="text/javascript" src="script/lib/angular.min.js"></script>
+        <script type="text/javascript" src="script/actionscript.js"></script>
         <link rel="stylesheet" href="css/actionscript.css">
     </head>
     <body>
@@ -47,13 +48,13 @@
                         <div class="control-group">
                             <label class="control-label" for="mobileno">Mobile No</label>
                             <div class="controls">
-                                <input type="text" name="<%=Constants.USERNAME%>" id="mobileno" placeholder="mobileno">
+                                <input type="text" class="form-control" name="<%=Constants.USERNAME%>" id="mobileno" placeholder="mobileno">
                             </div>
                         </div>
                         <div class="control-group" style="display: block">
                             <label class="control-label" for="inputPassword">Password</label>
                             <div class="controls">
-                                <input type="password" name="<%=Constants.PASSWORD%>" id="inputPassword" placeholder="Password">
+                                <input type="password" class="form-control" name="<%=Constants.PASSWORD%>" id="inputPassword" placeholder="Password">
                             </div>
                         </div>
                         <div class="control-group">

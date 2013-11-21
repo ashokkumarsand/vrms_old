@@ -54,7 +54,8 @@ public class UserObjects {
 
     public synchronized boolean registerUser(Integer userOfficeID, String name, String mobileNO, Integer extensionNO, String email, Integer managerID, Integer departmentID, Integer roleID) {
         Connection con = pool.checkOut();
-        try (PreparedStatement ps = con.prepareStatement("insert into users(user_office_id, name,mobile_no, extension_no,email,manager_id,role_id,department_id,password,user_status) values(?,?,?,?,?,?,?,?,?,?)")) {
+       
+        try (PreparedStatement ps = con.prepareStatement("insert into users(user_office_id, name,mobile_no, extension_no,email,manager_id,role_id,department_id,password,user_status) values(?,?,?,?,?,?,?,?,?,?)",PreparedStatement.RETURN_GENERATED_KEYS)) {
             if (userOfficeID == null) {
                 ps.setNull(1, Types.NULL);
             } else {
@@ -86,7 +87,6 @@ public class UserObjects {
             }
             ps.setString(9, Digest.md5(Constants.RELAM + Constants.DEFAULT_PASSWORD));
             ps.setBoolean(10, true);
-            System.out.println(" values : "+ email+" ,"+ mobileNO+ " "+ name+" "+departmentID+" "+ extensionNO+" "+ managerID+" "+ roleID+" "+ userOfficeID);
             ps.executeUpdate();
             return true;
 
