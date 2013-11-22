@@ -71,7 +71,7 @@ public class UserObjectValidator {
         }
         return exists;
     }
-    
+
     public boolean isUserExist(int id) {
         boolean exists = false;
         Connection con = pool.checkOut();
@@ -95,11 +95,30 @@ public class UserObjectValidator {
         uinfo.setUserid(userid);
         boolean flag = false;
         try {
-           flag = uinfo.getPermissions().containsAll(Arrays.asList(permissionses));
+            flag = uinfo.getPermissions().containsAll(Arrays.asList(permissionses));
         } catch (NoUserFoundException ex) {
-            
+
             Logger.getLogger(UserObjectValidator.class.getName()).log(Level.SEVERE, "User not exist in system for permissions", ex);
         }
         return flag;
+    }
+
+    public boolean isPasswordNotValid(String pass) {
+        boolean exists = false;
+        Connection con = pool.checkOut();
+        try (PreparedStatement ps = con.prepareStatement("SELECT PASSWORD FROM users where PASSWORD=?")) {
+            ps.setString(1, pass);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                exists = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserObjectValidator.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            pool.checkIn(con);
+        }
+        System.out.println(exists);
+        return exists;
     }
 }

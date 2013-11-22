@@ -63,6 +63,10 @@
                                 </label>
                                 <button type="submit" class="btn btn-primary">Sign in</button>
                             </div>
+                            <div>
+                                <a href="usersearch.jsp">Search User</a>
+                                <a href="changepassword.jsp">Change Password</a>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -70,3 +74,4 @@
         </div>
     </body>
 </html>
+

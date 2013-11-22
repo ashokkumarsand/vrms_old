@@ -27,7 +27,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
  */
 public class ServiceLoginAuth extends HttpServlet {
 
-    private final static String USER_NAME="username";
+        private final static String USER_NAME="username";
         private final static String PASSWORD="password";
         private final static String REMEMBER_ME="rememberme";
         private final static String SERIES_ID="sid";

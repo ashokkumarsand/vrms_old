@@ -8,6 +8,30 @@
         <filter-name>UserCreation</filter-name>
         <filter-class>com.vrms.creation.filter.UserCreation</filter-class>
     </filter>
+    <filter>
+        <filter-name>ChangePasswordFilter</filter-name>
+        <filter-class>com.vrms.changepassword.ChangePasswordFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>VehicleCreation</filter-name>
+        <filter-class>com.vrms.creation.filter.VehicleCreation</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CabCreation</filter-name>
+        <filter-class>com.vrms.creation.filter.CabCreation</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CabCreation</filter-name>
+        <url-pattern>/CreateCab</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>VehicleCreation</filter-name>
+        <url-pattern>/CreateVehicle</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ChangePasswordFilter</filter-name>
+        <url-pattern>/ChangePasswordServlet</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>UserCreation</filter-name>
         <url-pattern>/CreateUser</url-pattern>
@@ -40,6 +64,30 @@
         <servlet-name>CreateUser</servlet-name>
         <servlet-class>com.vrms.creation.CreateUser</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchUserServlet</servlet-name>
+        <servlet-class>com.vrms.search.SearchUserServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <servlet-class>com.vrms.changepassword.ChangePasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateVehicle</servlet-name>
+        <servlet-class>com.vrms.creation.CreateVehicle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateCab</servlet-name>
+        <servlet-class>com.vrms.creation.CreateCab</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <servlet-class>com.vrms.pagination.NotificationsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewRequestServlet</servlet-name>
+        <servlet-class>com.vrms.viewallocations.ViewRequestServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CookieHacker</servlet-name>
         <url-pattern>/cookie</url-pattern>
@@ -67,6 +115,30 @@
     <servlet-mapping>
         <servlet-name>CreateUser</servlet-name>
         <url-pattern>/CreateUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchUserServlet</servlet-name>
+        <url-pattern>/SearchUserServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <url-pattern>/ChangePasswordServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateVehicle</servlet-name>
+        <url-pattern>/CreateVehicle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateCab</servlet-name>
+        <url-pattern>/CreateCab</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationsServlet</servlet-name>
+        <url-pattern>/notification.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRequestServlet</servlet-name>
+        <url-pattern>/ViewRequestServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

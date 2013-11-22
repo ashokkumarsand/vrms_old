@@ -134,10 +134,6 @@ public class UserCreation implements Filter {
             out.write(new Gson().toJson(bean));
         }
     }
-
-    /**
-     * Return the filter configuration object for this filter.
-     */
     public FilterConfig getFilterConfig() {
         return (this.filterConfig);
     }

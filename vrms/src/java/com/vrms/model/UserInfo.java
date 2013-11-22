@@ -22,6 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Ashok
  */
+
 public class UserInfo {
 
     private Integer userid;
@@ -34,9 +35,9 @@ public class UserInfo {
     private Integer dept_id;
     private Integer role_id;
     private boolean status;
-    private boolean exists;
-    private JDBCConnectionPool pool;
-    private List<Permissions> permissionsList;
+    private transient boolean exists;
+    private transient JDBCConnectionPool pool;
+    private transient List<Permissions> permissionsList;
     public UserInfo() {
         pool = new JDBCConnectionPool();
     }
@@ -126,8 +127,44 @@ public class UserInfo {
         return userOfficeID;
     }
 
+    public void setUserOfficeID(Integer userOfficeID) {
+        this.userOfficeID = userOfficeID;
+    }
+
+    public void setExtensionNo(Integer extensionNo) {
+        this.extensionNo = extensionNo;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setManager_id(Integer manager_id) {
+        this.manager_id = manager_id;
+    }
+
+    public void setDept_id(Integer dept_id) {
+        this.dept_id = dept_id;
+    }
+
+    public void setRole_id(Integer role_id) {
+        this.role_id = role_id;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
     }
 
     public String getMobileNo() {
