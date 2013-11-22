@@ -8,6 +8,7 @@ import com.vrms.authentication.core.Constants;
 import com.vrms.connection.JDBCConnectionPool;
 import com.vrms.creation.CreateUser;
 import com.vrms.model.Roles;
+import com.vrms.model.UserInfo;
 import com.vrms.util.Digest;
 import com.vrms.util.Permissions;
 import java.sql.Connection;
@@ -111,4 +112,159 @@ public class UserObjects {
         pool.checkIn(con);
         return list;
     }
+    
+    
+    //search function for user by name , id and mobile no
+    public ArrayList<UserInfo> search(String search,String criteria) throws SQLException{
+		ArrayList<UserInfo> ulist=new ArrayList<>();
+		UserInfo u=new UserInfo();
+		
+	Connection con = pool.checkOut();
+        
+        //if search by user ID
+	if(criteria.equals("uid"))
+        {
+            try (PreparedStatement ps = con.prepareStatement("select * from Users where USER_ID=?"))
+            {
+                ps.setInt(1,Integer.parseInt(search));
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+			u.setUserid(rs.getInt(1));
+                        u.setUserOfficeID(rs.getInt(2));
+                        u.setName(rs.getString(3));
+                        u.setMobileNo(rs.getString(4));
+                        u.setExtensionNo(rs.getInt(5));
+                        u.setEmail(rs.getString(6));
+                        u.setManager_id(rs.getInt(7));
+                        u.setDept_id(rs.getInt(8));
+                        u.setStatus(rs.getBoolean(11));
+			
+			
+			ulist.add(u);
+			}
+                pool.checkIn(con);
+		return ulist;
+             } catch (SQLException ex)
+                {
+                     Logger.getLogger(UserObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+        }
+	//if search by user NAME
+        else if(criteria.equals("uname"))
+        {
+            System.out.println("In name branch");
+	   try (PreparedStatement ps = con.prepareStatement("select * from Users where NAME=?"))
+            {
+                ps.setString(1,search);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+			u.setUserid(rs.getInt(1));
+                        u.setUserOfficeID(rs.getInt(2));
+                        u.setName(rs.getString(3));
+                        u.setMobileNo(rs.getString(4));
+                        u.setExtensionNo(rs.getInt(5));
+                        u.setEmail(rs.getString(6));
+                        u.setManager_id(rs.getInt(7));
+                        u.setDept_id(rs.getInt(8));
+                        u.setStatus(rs.getBoolean(11));
+			
+			
+			ulist.add(u);
+			}
+                pool.checkIn(con);
+		return ulist;
+             } catch (SQLException ex)
+                {
+                     Logger.getLogger(UserObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+			
+	}
+        
+        else if(criteria.equals("mobile"))
+        {
+            
+	   try (PreparedStatement ps = con.prepareStatement("select * from Users where MOBILE_NO=?"))
+            {
+                ps.setString(1,search);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+			u.setUserid(rs.getInt(1));
+                        u.setUserOfficeID(rs.getInt(2));
+                        u.setName(rs.getString(3));
+                        u.setMobileNo(rs.getString(4));
+                        u.setExtensionNo(rs.getInt(5));
+                        u.setEmail(rs.getString(6));
+                        u.setManager_id(rs.getInt(7));
+                        u.setDept_id(rs.getInt(8));
+                        u.setStatus(rs.getBoolean(11));
+			
+			
+			ulist.add(u);
+			}
+                pool.checkIn(con);
+		return ulist;
+             } catch (SQLException ex)
+                {
+                     Logger.getLogger(UserObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+			
+	}
+        
+         pool.checkIn(con);
+	 return null;
+        
+    }
+    
+    
+    //for blocking and unblocking a user
+    
+    public boolean userStatusChange(String id,String status) throws SQLException{
+		
+			
+                Connection con = pool.checkOut();
+         
+             try (PreparedStatement ps = con.prepareStatement("Update USERS SET user_status= ? where USER_ID=?"))
+             {
+                ps.setBoolean(1,Boolean.parseBoolean(status));
+                ps.setInt(2, Integer.parseInt(id));
+                ps.executeUpdate();
+               
+                
+		
+             } catch (SQLException ex)
+                {
+                     Logger.getLogger(UserObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+			
+	
+        
+         pool.checkIn(con);
+	 return true;
+        
+    }
+    
+    //for changing password fo a particular user
+     public boolean userPasswordChange(String id,String newPass) throws SQLException{
+		
+			
+                Connection con = pool.checkOut();
+         
+             try (PreparedStatement ps = con.prepareStatement("Update Users SET password= ? where USER_ID=?"))
+             {
+                ps.setString(1,newPass);
+                ps.setInt(2, Integer.parseInt(id));
+                ps.executeUpdate();
+             } catch (SQLException ex)
+                {
+                     Logger.getLogger(UserObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }   
+			
+	
+        
+         pool.checkIn(con);
+	 return true;
+        
+    }
+    
+    
 }
