@@ -15,10 +15,8 @@ public enum Permissions {
     ALL,
     ASSIGN_CAB,
     BLOCK_USER,
-    CREATE_ROLE,
     EDIT_LOG_APPROVE,
     EDIT_LOG_REQUEST,
-    GRANT,
     INSERT_LOG,
     MANAGE_USER_STATUS,
     NONE,
@@ -29,7 +27,6 @@ public enum Permissions {
     REQUEST_MAKE,
     REQUEST_ONLY,
     REQUEST_VIEW,
-    REVOKE,
     UNBLOCK_USER,
     VIEW_CAB,
     VIEW_LOG

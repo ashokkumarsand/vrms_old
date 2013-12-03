@@ -10,9 +10,17 @@ package com.vrms.model;
  * @author acts
  */
 public class Person {
-    private long id;
+
+    private Integer id;
     private String name;
     private String mobileNo;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -28,13 +36,5 @@ public class Person {
 
     public void setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

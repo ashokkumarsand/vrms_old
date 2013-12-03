@@ -41,10 +41,6 @@
         <servlet-class>com.vrms.authentication.Logout</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ManageUser</servlet-name>
-        <servlet-class>com.vrms.views.ManageUser</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>CreateUser</servlet-name>
         <servlet-class>com.vrms.creation.CreateUser</servlet-class>
     </servlet>
@@ -57,8 +53,12 @@
         <servlet-class>com.vrms.creation.SubmitRequest</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddCab</servlet-name>
-        <servlet-class>com.vrms.creation.AddCab</servlet-class>
+        <servlet-name>AllocationServlet</servlet-name>
+        <servlet-class>com.vrms.viewallocations.AllocationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewRequestManagerServlet</servlet-name>
+        <servlet-class>com.vrms.viewallocations.ViewRequestManagerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CookieHacker</servlet-name>
@@ -68,6 +68,10 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/errorPage.jsp</location>
     </error-page>
+    <servlet>
+        <servlet-name>AddCab</servlet-name>
+        <servlet-class>com.vrms.creation.AddCab</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DBOperator</servlet-name>
         <url-pattern>/db</url-pattern>
@@ -79,10 +83,6 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/Logout</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ManageUser</servlet-name>
-        <url-pattern>/ManageUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CreateUser</servlet-name>
@@ -99,6 +99,14 @@
     <servlet-mapping>
         <servlet-name>AddCab</servlet-name>
         <url-pattern>/AddCab</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AllocationServlet</servlet-name>
+        <url-pattern>/AllocationServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewRequestManagerServlet</servlet-name>
+        <url-pattern>/ViewRequestManagerServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

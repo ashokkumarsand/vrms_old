@@ -4,6 +4,7 @@
     Author     : Ashok
 --%>
 
+<%@page import="com.vrms.model.UserInfo"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="com.vrms.util.UserMenu"%>
 <%@page import="com.vrms.authentication.core.Constants"%>
@@ -15,9 +16,15 @@
 
 
 <%
-    List<Permissions> permissions = (List<Permissions>) session.getAttribute(Constants.PERMISSIONS);
-    permissions.retainAll(UserMenu.USER_MANAGE.getPermissions());
+    UserInfo userinfo = new UserInfo();
+    userinfo.setUserid(Integer.parseInt(session.getAttribute(Constants.USERID).toString()));
+
+    List<Permissions> permissions = userinfo.getPermissions();
+
+    permissions.retainAll(UserMenu.CAB_MANAGE.getPermissions());
+
     if (permissions.size() > 0) {
+
 %>
 
 
@@ -94,7 +101,7 @@
                             <div class="col-md-7 col-md-offset-4">
                                 <div>
                                     <div class="control-group">
-                                        <button type="submit" id="createCab" onclick="javascript:createVehical()" class="form-control btn btn-primary"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; Vehicle </button>
+                                        <button type="submit" id="createCab" onclick="javascript:createVehical()" class="form-control btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; Vehicle </button>
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +130,7 @@
                                 <div>
                                     <div class="control-group">
                                         <label for="name" class="control-label">Name</label>
-                                        <input type="hidden" id="cabTypeId" value="${type.id}}"/>
+                                        <input type="hidden" id="cabTypeId" value="${type.id}"/>
                                         <input name="" id="name" type="text" class="form-control" placeholder="Name">
                                     </div>
                                 </div>
@@ -154,7 +161,7 @@
                             <div class="col-md-7 col-md-offset-4">
                                 <div>
                                     <div class="control-group">
-                                        <button type="submit" id="createCab" onclick="javascript:CreateCab(${type.id})" class="form-control btn btn-primary"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; Cab </button>
+                                        <button type="submit" id="createCab" onclick="javascript:CreateCab(${type.id})" class="form-control btn btn-primary btn-sm"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp; Cab </button>
                                     </div>
                                 </div>
                             </div>

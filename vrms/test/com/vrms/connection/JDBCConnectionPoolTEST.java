@@ -18,6 +18,5 @@ public class JDBCConnectionPoolTEST {
         Connection con =  pool.checkOut();
             System.out.println("int : "+ i);
         }
-        
     }
 }

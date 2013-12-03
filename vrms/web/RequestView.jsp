@@ -4,9 +4,75 @@
     Author     : Ashok
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="com.vrms.authentication.core.Constants"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="com.vrms.connection.JDBCConnectionPool"%>
+<%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<div class="panel">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Purpose</th>
+                <th>Status</th>
+            </tr>
+            <%
+                JDBCConnectionPool pool = new JDBCConnectionPool();
+                Connection con = pool.checkOut();
+                PreparedStatement ps = con.prepareStatement("SELECT request.start_time, request.end_time, request.purpose, request_status.request_status_values FROM public.request,   public.request_status WHERE  request.request_status = request_status.request_status_id AND request.user_id = ? order by request.timestamp desc");
+                ps.setInt(1, Integer.parseInt(session.getAttribute(Constants.USERID).toString()));
+                ResultSet rs = ps.executeQuery();
+                int i = 1;
+                while (rs.next()) {
 
+            %>
+            <tr>
+                <td><%=i++%></td>
+                <td><%
+                    Timestamp stsm = rs.getTimestamp("start_time");
+                    Date std = new Date(stsm.getTime());
+                    DateFormat df = new SimpleDateFormat("dd/MM/YYYY HH:MM");
+                    String startDate = df.format(std);
+                    log("sdate :: " + startDate);
+                    %>
+                    <%=stsm%> </td>
+                <td>
+                    <%
+                        Timestamp etsm = rs.getTimestamp("end_time");
+                        Date etd = new Date(etsm.getTime());
+                        String endDate = df.format(etd);
+                        log("edate :: " + endDate);
+                    %>
+
+                    <%=etsm%> 
+                </td>
+                <td><%= rs.getString("purpose")%></td>
+                <td><%= rs.getString("request_status_values")%></td>
+            </tr>
+            <%
+                }
+                if (i == 1) {
+            %>
+            <tr>
+                <td colspan="5">
+                    <label> No request found </label>
+                </td>
+
+            </tr>
+            <%                                                }
+            %>
+        </thead>
+    </table>
+</div>
 <div class="panel">
     <div class="panel-heading well-sm label label-primary">
         <strong>Request</strong>
@@ -20,24 +86,35 @@
                         <div class="row">
                             <div class="control-group col-md-4">
                                 <label for="starttime" class="control-label">From</label>
-                                <div  class="input-group input-append date" >
-                                    <input type="text" data-format="dd/MM HH:mm" id="starttime"  ng-model="st" class="form-control" placeholder="DATE" />
-                                    <span class="add-on input-group-addon"> <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="glyphicon glyphicon-calendar"></i></span>
+                                <div  id="st" class="input-group input-append date" >
+                                    <input type="text" data-format="dd/MM/yyyy HH:mm" id="starttime"  ng-model="st" class="form-control" placeholder="DATE" />
+                                    <span class="add-on input-group-addon" id="stIcon"> <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
                             </div>
                             <div  class="control-group col-md-offset-3 col-md-4">
                                 <label for="endtime" class="control-label">Till</label>
-                                <div   class="input-group input-append date">
-                                    <input type="text" data-format="dd/MM HH:mm" id="endtime"  ng-model="et"class="form-control" placeholder="DATE" />
-                                    <span class="add-on input-group-addon"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="glyphicon glyphicon-calendar"></i></span>
+                                <div id="et"  class="input-group input-append date">
+                                    <input type="text" data-format="dd/MM/yyyy HH:mm" id="endtime"  ng-model="et"class="form-control" placeholder="DATE" />
+                                    <span class="add-on input-group-addon" id="etTime"><i data-time-icon="icon-time" data-date-icon="icon-calendar" class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
                             </div>
                         </div>
 
                         <script type="text/javascript">
-                            $(function() {
-                                $('#starttime').datetimepicker({language: 'pt-BR'});
-                                $('#endtime').datetimepicker({language: 'pt-BR'});
+                            $('#starttime').datetimepicker({
+                                format: 'd/m/Y H:i',
+                                step: 10
+                            });
+                            $('#stIcon').click(function() {
+                                $('#starttime').datetimepicker('show'); //support hide,show and destroy command
+                            });
+
+                            $('#endtime').datetimepicker({
+                                format: 'd/m/Y H:i',
+                                step: 10
+                            });
+                            $('#etTime').click(function() {
+                                $('#endtime').datetimepicker('show'); //support hide,show and destroy command
                             });
                         </script>
                         <div class="row  mgt10">
@@ -227,8 +304,8 @@
                                                 <div class="control-group">
                                                     <label for="selectLocation" class="control-label">Location</label>
                                                     <select id="selectLocation" ng-model="loc" class="form-control">
-                                                        <option>Select </option>
-                                                        <option ng-repeat="location in locations" value="{{locations.indexOf(location)}}">{{location.locName}}</option>
+                                                        <option selected="selected">Select </option>
+                                                        <option  ng-show="!!locations.length" ng-repeat="location in locations" value="{{locations.indexOf(location)}}"><script>console.log(location)</script>{{location.locName}}</option>
                                                     </select>
                                                 </div>
                                             </div>

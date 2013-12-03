@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.vrms.model;
 
 /**
@@ -11,7 +10,8 @@ package com.vrms.model;
  * @author acts
  */
 public class Location {
-    private long id;
+
+    private Integer id;
     private String no;
     private String name;
     private String street;
@@ -19,11 +19,11 @@ public class Location {
     private String city;
     private String state;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,7 +74,4 @@ public class Location {
     public void setState(String state) {
         this.state = state;
     }
-
-   
-    
 }

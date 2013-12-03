@@ -23,10 +23,11 @@
                 permissions.retainAll(UserMenu.USER_MANAGE.getPermissions());
                 if (permissions.contains(Permissions.ADD_USER)) {
             %>
-
+            <div class="col-md-4">
             <form class="navbar-form navbar-left">
-                <input type="text" class="form-control col-lg-3" placeholder="Search">
+                <input type="text" class="form-control" placeholder="Search">
             </form>
+                </div>
             <ul class="nav pull-right">
                 <li>
                     <a href="#">
@@ -43,8 +44,8 @@
                 <div class="col-md-5">
                     <div>
                         <div class="control-group col-md-offset-1">
-                            <label for="officeId" class="control-label">Official ID</label>
-                            <input id="officeId" type="textbox" class="form-control col-md-4" placeholder="Official Id">
+                            <label for="officeId" class="control-label">Employee ID</label>
+                            <input id="officeId" type="textbox" class="form-control col-md-4" placeholder="Employee ID">
                         </div>
                     </div>
                 </div>

@@ -24,11 +24,34 @@ $(document).ready(function() {
         }
     });
 
+
+
+    $("#ASSIGN_CAB").click(function() {
+        if (!$("#ASSIGN_CAB").hasClass("active")) {
+            $.ajax({
+                url: 'viewrequest.jsp',
+                dataType: 'html',
+                success: function(obj) {
+                    $("#container").html(obj);
+                }
+            });
+        }
+    });
+    $("#REQUEST_APPROVE").click(function() {
+        if (!$("#REQUEST_APPROVE").hasClass("active")) {
+            $.ajax({
+                url: 'viewrequestsmanager.jsp',
+                dataType: 'html',
+                success: function(obj) {
+                    $("#container").html(obj);
+                }
+            });
+        }
+    });
     $(".myTask").click(function() {
         $(".myTask").removeClass("active");
         $(this).addClass("active");
     });
-
 });
 var o;
 function CreateUser() {
@@ -72,7 +95,7 @@ function CreateCab(obj) {
         url: 'AddCab',
         type: 'post',
         data: {
-            typeid:$("#addCab #cabTypeId").val(),
+            typeid: $("#addCab #cabTypeId").val(),
             name: $("#addCab #name").val(),
             vno: $("#addCab #vehicleNo").val(),
             desc: $("#addCab #desc").val()
@@ -81,6 +104,7 @@ function CreateCab(obj) {
             obj = eval("(" + obj + ")");
             if (obj.added) {
                 informationDisplay("Congrates", "CAB added successfully");
+                $("#CAB_MANAGE").click();
                 $("#addCab #name").val('');
                 $("#addCab #vehicleNo").val('')
                 $("#addCab #desc").val('')
@@ -159,6 +183,7 @@ request.service('DataShare', ['$rootScope', function($rootScope) {
                 $rootScope.$broadcast('person.update');
             },
             addLoc: function(loc) {
+                console.log(service.locations);
                 service.locations.push(loc);
                 $rootScope.$broadcast('loc.update');
             },
@@ -174,7 +199,6 @@ request.service('DataShare', ['$rootScope', function($rootScope) {
                 service.points.splice(service.points.indexOf(point), 1);
                 $rootScope.$broadcast('point.update');
             }
-
         };
         return service;
     }]);
@@ -248,25 +272,31 @@ request.controller("LocCtrl", LocCtrl);
 request.controller("PointCtrl", PointCtrl);
 
 //amgular js cantroller for fetch request
-var ReqCtrl = ['$scope', '$http', 'DataShare', function($scope, $http, $service) {
+var ReqCtrl = ['$scope', '$http', 'DataShare', '$compile', function($scope, $http, $service, $compile) {
 
-//        $scope.fetchRequest = function() {
-//            var postdata = {
-//                st: $("#starttime").val(),
-//                et: $("#endtime").val(),
-//                purpose: $("#purpose").val(),
-//                person: $service.persons,
-//                location: $service.locations,
-//                points: $service.points
-//            }
-//            console.log(postdata);
-//            $http({method: 'post', url: 'SubmitRequest', params: postdata}).success(function(data) {
-//                console.log("data");
-//                console.log(data);
-//            }).error(function(data) {
-//                console.log(data);
-//            });
-//        }
+        $scope.fetchRequest = function() {
+            var postdata = {
+                st: $("#starttime").val(),
+                et: $("#endtime").val(),
+                purpose: $("#purpose").val(),
+                person: $service.persons,
+                location: $service.locations,
+                points: $service.points
+            }
+
+            $http({method: 'post', url: 'SubmitRequest', params: postdata}).success(function(data) {
+                informationDisplay("Congrats", "Request submitted");
+                $http.get('RequestView.jsp').success(function(data) {
+                    $("#container").html($compile(data)($scope))
+                    $service.persons=[];
+                    $service.points=[];
+                    $service.locations=[];
+                })
+
+            });
+        }
+
+
     }];
 
 request.controller("ReqCtrl", ReqCtrl);
@@ -290,6 +320,8 @@ var requestViewCtrl = ['$scope', '$compile', '$http', function($scope, $compile,
 request.controller("requestViewCtrl", requestViewCtrl);
 
 
+
+
 function errorDisplay(type, msg) {
     console.log(msg)
     $("#putError").prepend('<div class="alert alert-danger alert-dismissable"><button type="button" class="close" data-dismiss="alert">×</button><strong style="display: inline-block">' + type + '  </strong><div id="msg" style="display: inline-block">&nbsp;' + msg + '</div></div>')
@@ -297,4 +329,49 @@ function errorDisplay(type, msg) {
 
 function informationDisplay(type, msg) {
     $("#putError").prepend('<div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert">×</button><strong style="display: inline-block">' + type + '  </strong><div id="msg" style="display: inline-block">&nbsp;' + msg + '</div></div>')
+}
+
+
+//assign cab module
+
+function assignCab(reqId) {
+    console.log("seelcted value :: " + $("#avilCab" + reqId + " option:selected").val())
+    $.ajax({
+        url: 'AllocationServlet',
+        data: {
+            requestID: reqId,
+            cabID: $("#avilCab" + reqId + " option:selected").val()
+        },
+        type: 'POST',
+        success: function(data) {
+            console.log(data)
+            var obj = eval("(" + data + ")");
+            if (obj.status) {
+                informationDisplay("Congratulation", obj.message);
+                $("#ASSIGN_CAB").removeClass("active").click();
+            } else {
+                errorDisplay("Something wrong !!", obj.message);
+            }
+        }
+    })
+}
+
+function approveRequest(status, reqId) {
+    $.ajax({
+        url: 'ViewRequestManagerServlet',
+        type: 'post',
+        data: {
+            status: status,
+            requestID: reqId
+        },
+        success: function(obj) {
+            obj = eval("(" + obj + ")");
+            if (obj.status) {
+                informationDisplay("Request status updated", "");
+                $("#REQUEST_APPROVE").removeClass("active").click();
+            } else {
+                errorDisplay("Try again");
+            }
+        }
+    })
 }

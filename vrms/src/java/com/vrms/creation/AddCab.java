@@ -5,9 +5,11 @@
 package com.vrms.creation;
 
 import com.vrms.dao.CabObjects;
+import com.vrms.validate.CabObjectsValidator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,18 +37,28 @@ public class AddCab extends HttpServlet {
         String name = request.getParameter("name");
         String vno = request.getParameter("vno");
         String desc = request.getParameter("desc");
+        System.out.println("paranm :: " + typeid + " :: " + name + " :: " + vno + " :: " + desc);
         CabObjects cabO = new CabObjects();
         PrintWriter out = response.getWriter();
-        int id = cabO.createCabs(name, Integer.parseInt(typeid), desc);
-        if (id != 0) {
-            if (cabO.assignVehicleToCabs(id, vno, "New ADDED")) {
-                out.println("{added:true}");
+
+        CabObjectsValidator validator = CabObjectsValidator.getInstance();
+        if (validator.isVehicleNoExist(vno)) {
+            int id = cabO.createCabs(name, Integer.parseInt(typeid), desc);
+
+            if (id != 0) {
+                if (cabO.assignVehicleToCabs(id, vno, "New ADDED")) {
+                    out.println("{added:true}");
+                } else {
+                    out.println("{added:false,resion:\"already alloted\"}");
+                }
             } else {
-                out.println("{added:false,resion:already alloted}");
-    }
+                out.println("{added:false,resion:\"try again\"}");
+            }
         } else {
-            out.println("{added:false,resion:try again}");
+            out.println("{added:false,resion:\"vehicle no exist\"}");
         }
+
+
     }
 
     /**

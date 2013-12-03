@@ -18,7 +18,7 @@ public enum UserMenu {
 
         @Override
         public List<Permissions> getPermissions() {
-            return Arrays.asList(Permissions.ADD_USER,Permissions.BLOCK_USER,Permissions.UNBLOCK_USER,Permissions.CREATE_ROLE);
+            return Arrays.asList(Permissions.ADD_USER,Permissions.BLOCK_USER,Permissions.UNBLOCK_USER);
         }
         
     },CAB_MANAGE{

@@ -75,12 +75,11 @@ public class CabObjectsValidator {
     }
     
     //for checking cabID exists or not while inserting an ID in any of the dependent table
-    public boolean isVehicleNoExist(int id) throws SQLException {
+    public boolean isVehicleNoExist(String id) {
         boolean exists = false;
         Connection con = pool.checkOut();
-        con.setAutoCommit(false); // for checking query without any entry in database
         try (PreparedStatement ps = con.prepareStatement("SELECT VEHICLE_NO FROM VEHICLES where VEHICLE_NO=?")) {
-            ps.setInt(1, id);
+            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 exists = true;
@@ -98,15 +97,15 @@ public class CabObjectsValidator {
     //main function for cheching query without any data entry in database
     public static void main(String args[]) throws SQLException
     {
-        CabObjectsValidator c=new CabObjectsValidator();
-       boolean result= c.isVehicleNoExist(100);
-       if(result)
-       {
-           System.out.println("No exists");
-       }
-       else
-       {
-           System.out.println("No does not exists");
-       }
+//        CabObjectsValidator c=new CabObjectsValidator();
+//       boolean result= c.isVehicleNoExist(100);
+//       if(result)
+//       {
+//           System.out.println("No exists");
+//       }
+//       else
+//       {
+//           System.out.println("No does not exists");
+//       }
     }
 }

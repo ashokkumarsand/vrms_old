@@ -9,11 +9,14 @@ package com.vrms.model;
  * @author Ashok
  */
 public class Cab {
+
     private int id;
     private int typeid;
     private String name;
     private String description;
     private boolean status;
+    private String cabTypeValue;
+    private int capacity;
 
     public int getId() {
         return id;
@@ -53,5 +56,21 @@ public class Cab {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getCabTypeValue() {
+        return cabTypeValue;
+    }
+
+    public void setCabTypeValue(String cabTypeValue) {
+        this.cabTypeValue = cabTypeValue;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 }
